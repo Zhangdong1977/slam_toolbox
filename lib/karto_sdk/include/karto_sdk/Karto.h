@@ -6166,10 +6166,18 @@ protected:
       kt_double rangeReading = pScan->GetRangeReadings()[pointIndex];
       kt_bool isEndPointValid = rangeReading < (rangeThreshold - KT_TOLERANCE);
 
-      if (rangeReading <= minRange || rangeReading >= maxRange || std::isnan(rangeReading)) {
+      if (rangeReading <= minRange || std::isnan(rangeReading)) {
         // ignore these readings
         pointIndex++;
         continue;
+      } else if (std::isinf(rangeReading) || rangeReading >= maxRange) {
+        // no return / out of range: trace free space up to rangeThreshold
+        // (point is at infinity or beyond maxRange, reconstruct at rangeThreshold)
+        kt_double angle = pScan->GetSensorPose().GetHeading() +
+                          laserRangeFinder->GetMinimumAngle() +
+                          pointIndex * laserRangeFinder->GetAngularResolution();
+        point.SetX(scanPosition.GetX() + (rangeThreshold * cos(angle)));
+        point.SetY(scanPosition.GetY() + (rangeThreshold * sin(angle)));
       } else if (rangeReading >= rangeThreshold) {
         // trace up to range reading
         kt_double ratio = rangeThreshold / rangeReading;

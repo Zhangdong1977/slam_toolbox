@@ -499,8 +499,9 @@ void SlamToolbox::setROSInterfaces()
     "slam_toolbox/loop_closure_event", 10);
 
   scan_filter_sub_ =
-    std::make_unique<message_filters::Subscriber<sensor_msgs::msg::LaserScan>>(
-    shared_from_this().get(), scan_topic_, rclcpp::SensorDataQoS());
+    std::make_unique<message_filters::Subscriber<sensor_msgs::msg::LaserScan,
+      rclcpp_lifecycle::LifecycleNode>>(
+    shared_from_this().get(), scan_topic_, rmw_qos_profile_sensor_data);
   scan_filter_ =
     std::make_unique<tf2_ros::MessageFilter<sensor_msgs::msg::LaserScan>>(
     *scan_filter_sub_, *tf_, odom_frame_, scan_queue_size_,

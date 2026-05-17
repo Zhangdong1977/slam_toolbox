@@ -154,7 +154,8 @@ protected:
   std::unique_ptr<tf2_ros::Buffer> tf_;
   std::unique_ptr<tf2_ros::TransformListener> tfL_;
   std::unique_ptr<tf2_ros::TransformBroadcaster> tfB_;
-  std::unique_ptr<message_filters::Subscriber<sensor_msgs::msg::LaserScan>> scan_filter_sub_;
+  std::unique_ptr<message_filters::Subscriber<sensor_msgs::msg::LaserScan,
+    rclcpp_lifecycle::LifecycleNode>> scan_filter_sub_;
   std::unique_ptr<tf2_ros::MessageFilter<sensor_msgs::msg::LaserScan>> scan_filter_;
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::OccupancyGrid>> sst_;
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::MapMetaData>> sstm_;

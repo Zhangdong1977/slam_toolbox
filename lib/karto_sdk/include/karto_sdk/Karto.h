@@ -6172,7 +6172,6 @@ protected:
         continue;
       } else if (std::isinf(rangeReading) || rangeReading >= maxRange) {
         // no return / out of range: trace free space up to rangeThreshold
-        // (point is at infinity or beyond maxRange, reconstruct at rangeThreshold)
         kt_double angle = pScan->GetSensorPose().GetHeading() +
                           laserRangeFinder->GetMinimumAngle() +
                           pointIndex * laserRangeFinder->GetAngularResolution();
